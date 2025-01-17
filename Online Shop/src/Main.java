@@ -9,7 +9,7 @@ public class Main {
         String action = sc.nextLine();
         // If not correct , make use try again
         while (!action.equals("Begin")) {
-            System.out.println("Invalid input, please try again.");
+            System.out.println("Invalid input, please try again:");
             action = sc.nextLine();
         }
         // Categories
@@ -36,9 +36,9 @@ public class Main {
         for (int i = 0; i < 3; i++)
             bStock.add((int)(Math.random() * 10 + 0));
         // Cart
-        int j = 0;
+        int j;
         int item;
-        int stockAmount;
+        int stockAmount = 0;
         double total = 0.0;
         // Cart items
         ArrayList<String> cart = new ArrayList<>();
@@ -51,15 +51,16 @@ public class Main {
         int i = 1;
         while (!action.equals("End")) {
             //Chose Category
-            System.out.println("To see the selection of products, Type the name of the category:");
+            System.out.println("Categories:");
             //Print out Category
             for (String categories : category)
                 System.out.println("\"" + categories + "\"");
             //Choose
+            System.out.println("To see the selection of products, Type the name of the category:");
             action = sc.nextLine();
             // If not correct , make user try again
             while (!action.equals("Electronics") && !action.equals("Clothing") && !action.equals("Books")) {
-                System.out.println("Invalid input, please try again.");
+                System.out.println("Invalid input, please try again:");
                 action = sc.nextLine();
             }
             // Loop until ready to Check out
@@ -67,6 +68,7 @@ public class Main {
                 switch (action) {
                     case "Electronics":
                         // Show Products, Price, and Stock
+                        System.out.println("Products:");
                         for (String items : electronicP) {
                             //Show Products & Price
                             System.out.print("\"" + i + "\" " + items + "\nPrice: $" + ePrice[i - 1]);
@@ -84,7 +86,7 @@ public class Main {
                         action = sc.nextLine();
                         // If not correct , make user try again
                         while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                            System.out.println("Invalid input, please try again.");
+                            System.out.println("Invalid input, please try again:");
                             action = sc.nextLine();
                         }
                         // While Purchasing within chosen Category
@@ -94,7 +96,7 @@ public class Main {
                             item = sc.nextInt();
                             // If not correct , make user try again
                             while (item != 1 && item != 2 && item != 3) {
-                                System.out.println("Invalid input, please try again.");
+                                System.out.println("Invalid input, please try again:");
                                 item = sc.nextInt();
                             }
                             // Check Stock
@@ -108,16 +110,19 @@ public class Main {
                             // Check if # of item goes over stock
                             while (eStock.get(item - 1) - stockAmount < 0 || stockAmount < 0) {
                                 //If larger than stock or -ve, make user try again
-                                System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
+                                if (eStock.get(item - 1) - stockAmount < 0)
+                                    System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
+                                else
+                                    System.out.println("Invalid input, please try again:");
                                 stockAmount = sc.nextInt();
                             }
                             // Confirmation to add to cart, change stock or cancel purchase
-                            System.out.println("Would you like to add " + stockAmount + " item(s) of " + electronicP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
+                            System.out.println("Would you like to add " + stockAmount + " item(s) of " + electronicP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount, or \"Cancel\":");
                             sc.nextLine();
                             action = sc.nextLine();
                             // If not correct , make user try again
                             while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                System.out.println("Invalid input, please try again.");
+                                System.out.println("Invalid input, please try again:");
                                 action = sc.nextLine();
                             }
                             // If unhappy with stock
@@ -132,266 +137,96 @@ public class Main {
                                     stockAmount = sc.nextInt();
                                 }
                                 // Confirmation to add to cart, change stock or cancel purchase
-                                System.out.println("Would you like to add " + stockAmount + " items of " + electronicP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
+                                System.out.println("Would you like to add " + stockAmount + " item(s) of " + electronicP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount, or \"Cancel\":");
                                 sc.nextLine();
                                 action = sc.nextLine();
                                 // If not correct , make user try again
                                 while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                    System.out.println("Invalid input, please try again.");
+                                    System.out.println("Invalid input, please try again:");
                                     action = sc.nextLine();
                                 }
                             }
                             // If unhappy with purchase
                             if (action.equals("Cancel")) {
+                                // Show Products, Price, and Stock
+                                i = 1;
+                                System.out.println("Products:");
+                                for (String items : electronicP) {
+                                    //Show Products & Price
+                                    System.out.print("\"" + i + "\" " + items + "\nPrice: $" + ePrice[i - 1]);
+                                    // Show Stock
+                                    if (eStock.get(i - 1) == 0)
+                                        // Stock = 0
+                                        System.out.println("\nStock: Out of Stock");
+                                    else
+                                        // Stock > 0
+                                        System.out.println("\nStock: " + eStock.get(i - 1));
+                                    i++;
+                                }
                                 // Purchase, Categories, Cart, or End
                                 System.out.println("Would you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
                                 action = sc.nextLine();
                                 // If not correct , make user try again
                                 while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
+                                    System.out.println("Invalid input, please try again:");
                                     action = sc.nextLine();
                                 }
                             }
                             // if happy with purchase
                             if (action.equals("Yes")) {
-                                // Updated Stock
-                                eStock.set(item - 1, eStock.get(item - 1) - stockAmount);
-                                //Add item to cart
-                                cart.add(electronicP[item - 1]);
-                                //Add price of item to cart
-                                cartPrice.add(ePrice[item - 1]);
-                                //Add stock of item to cart
-                                cartStock.add(stockAmount);
-                                // add total of item price * stock
-                                cartTotal.add(ePrice[item - 1] * stockAmount);
-                                // Purchase, Categories, Cart, or End
-                                System.out.println("Added to Cart.\nWould you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
+                                if (cart.contains(electronicP[item - 1])) {
+                                    // Updated Stock
+                                    eStock.set(item - 1, eStock.get(item - 1) - stockAmount);
+                                    // Update stock in cart
+                                    cartStock.set(cart.indexOf(electronicP[item - 1]), cartStock.get(cart.indexOf(electronicP[item - 1])) + stockAmount);
+                                    cartTotal.set(cart.indexOf(electronicP[item - 1]), ePrice[item - 1] * stockAmount + cartTotal.get(cart.indexOf(electronicP[item - 1])));
+                                } else {
+                                    // Updated Stock
+                                    eStock.set(item - 1, eStock.get(item - 1) - stockAmount);
+                                    //Add item to cart
+                                    cart.add(electronicP[item - 1]);
+                                    //Add price of item to cart
+                                    cartPrice.add(ePrice[item - 1]);
+                                    //Add stock of item to cart
+                                    cartStock.add(stockAmount);
+                                    // add total of item price * stock
+                                    cartTotal.add(ePrice[item - 1] * stockAmount);
                                 }
-                            }
-                        }
-                        i = 1;
-                        break;
-                    case "Clothing":
-                        // Show Products, Price, and Stock
-                        for (String items : clothingP) {
-                            //Show Products & Price
-                            System.out.print("\"" + i + "\" " + items + "\nPrice: $" + cPrice[i - 1]);
-                            // Show Stock
-                            if (cStock.get(i - 1) == 0)
-                                // Stock = 0
-                                System.out.println("\nStock: Out of Stock");
-                            else
-                                // Stock > 0
-                                System.out.println("\nStock: " + cStock.get(i - 1));
-                            i++;
-                        }
-                        // Purchase, Categories, Cart, or End
-                        System.out.println("Would you like to \"Purchase\", browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                        action = sc.nextLine();
-                        // If not correct , make user try again
-                        while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                            System.out.println("Invalid input, please try again.");
-                            action = sc.nextLine();
-                        }
-                        // While Purchasing within chosen Category
-                        while (action.equals("Purchase")) {
-                            System.out.println("Enter the number of the item you like to buy:");
-                            // # in front of item when shown
-                            item = sc.nextInt();
-                            // If not correct , make user try again
-                            while (item != 1 && item != 2 && item != 3) {
-                                System.out.println("Invalid input, please try again.");
-                                item = sc.nextInt();
-                            }
-                            // Check Stock
-                            while (cStock.get(item - 1) == 0) {
-                                System.out.println("Item out of Stock. Choose a different product.\nEnter the number of the item you like to buy:");
-                                item = sc.nextInt();
-                            }
-                            // # of items
-                            System.out.println("Enter the amount you like to buy:");
-                            stockAmount = sc.nextInt();
-                            // Check if # of item goes over stock
-                            while (cStock.get(item - 1) - stockAmount < 0 || stockAmount < 0) {
-                                //If larger than stock or -ve, make user try again
-                                System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
-                                stockAmount = sc.nextInt();
-                            }
-                            // Confirmation to add to cart, change stock or cancel purchase
-                            System.out.println("Would you like to add " + stockAmount + " item(s) of " + clothingP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
-                            sc.nextLine();
-                            action = sc.nextLine();
-                            // If not correct , make user try again
-                            while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                System.out.println("Invalid input, please try again.");
-                                action = sc.nextLine();
-                            }
-                            // If unhappy with stock
-                            while (action.equals("Change")) {
-                                // # of items
-                                System.out.println("Enter the amount you like to buy:");
-                                stockAmount = sc.nextInt();
-                                // Check if # of item goes over stock
-                                while (cStock.get(item - 1) - stockAmount < 0) {
-                                    //If larger than stock or -ve, make user try again
-                                    System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
-                                    stockAmount = sc.nextInt();
+                                // Confirmation
+                                System.out.println("Added to Cart.");
+                                // Show Cart
+                                // Title, Item
+                                System.out.println("Your Cart:\nItem(s):");
+                                // Loop util 1 less than cart size
+                                for (j = 0; j < cart.size(); j++) {
+                                    // #, name, price, stock, item total
+                                    System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nItem Total: $" + cartTotal.get(j));
+                                    // Sum up total
+                                    total += cartTotal.get(j);
                                 }
-                                // Confirmation to add to cart, change stock or cancel purchase
-                                System.out.println("Would you like to add " + stockAmount + " item(s) of " + clothingP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
-                                sc.nextLine();
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
+                                //Total of Cart
+                                System.out.println("Total: $" + total + "\n");
+                                total = 0;
+                                // Show Products, Price, and Stock
+                                i = 1;
+                                for (String items : electronicP) {
+                                    //Show Products & Price
+                                    System.out.print("\"" + i + "\" " + items + "\nPrice: $" + ePrice[i - 1]);
+                                    // Show Stock
+                                    if (eStock.get(i - 1) == 0)
+                                        // Stock = 0
+                                        System.out.println("\nStock: Out of Stock");
+                                    else
+                                        // Stock > 0
+                                        System.out.println("\nStock: " + eStock.get(i - 1));
+                                    i++;
                                 }
-                            }
-                            // If unhappy with purchase
-                            if (action.equals("Cancel")) {
                                 // Purchase, Categories, Cart, or End
                                 System.out.println("Would you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
                                 action = sc.nextLine();
                                 // If not correct , make user try again
                                 while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
-                                }
-                            }
-                            // if happy with purchase
-                            if (action.equals("Yes")) {
-                                // Updated Stock
-                                cStock.set(item - 1, cStock.get(item - 1) - stockAmount);
-                                //Add item to cart
-                                cart.add(clothingP[item - 1]);
-                                //Add price of item to cart
-                                cartPrice.add(cPrice[item - 1]);
-                                //Add stock of item to cart
-                                cartStock.add(stockAmount);
-                                // add total of item price * stock
-                                cartTotal.add(cPrice[item - 1] * stockAmount);
-                                // Purchase, Categories, Cart, or End
-                                System.out.println("Added to Cart.\nWould you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
-                                }
-                            }
-                        }
-                        i = 1;
-                        break;
-                    case "Books":
-                        // Show Products, Price, and Stock
-                        for (String items : bookP) {
-                            //Show Products & Price
-                            System.out.print("\"" + i + "\" " + items + "\nPrice: $" + bPrice[i - 1]);
-                            // Show Stock
-                            if (bStock.get(i - 1) == 0)
-                                // Stock = 0
-                                System.out.println("\nStock: Out of Stock");
-                            else
-                                // Stock > 0
-                                System.out.println("\nStock: " + bStock.get(i - 1));
-                            i++;
-                        }
-                        // Purchase, Categories, Cart, or End
-                        System.out.println("Would you like to \"Purchase\", browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                        action = sc.nextLine();
-                        // If not correct , make user try again
-                        while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                            System.out.println("Invalid input, please try again.");
-                            action = sc.nextLine();
-                        }
-                        // While Purchasing within chosen Category
-                        while (action.equals("Purchase")) {
-                            System.out.println("Enter the number of the item you like to buy:");
-                            // # in front of item when shown
-                            item = sc.nextInt();
-                            // If not correct , make user try again
-                            while (item != 1 && item != 2 && item != 3) {
-                                System.out.println("Invalid input, please try again.");
-                                item = sc.nextInt();
-                            }
-                            // Check Stock
-                            while (bStock.get(item - 1) == 0) {
-                                System.out.println("Item out of Stock. Choose a different product.\nEnter the number of the item you like to buy:");
-                                item = sc.nextInt();
-                            }
-                            // # of items
-                            System.out.println("Enter the amount you like to buy:");
-                            stockAmount = sc.nextInt();
-                            // Check if # of item goes over stock
-                            while (bStock.get(item - 1) - stockAmount < 0 || stockAmount < 0) {
-                                //If larger than stock or -ve, make user try again
-                                System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
-                                stockAmount = sc.nextInt();
-                            }
-                            // Confirmation to add to cart, change stock or cancel purchase
-                            System.out.println("Would you like to add " + stockAmount + " item(s) of " + bookP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
-                            sc.nextLine();
-                            action = sc.nextLine();
-                            // If not correct , make user try again
-                            while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                System.out.println("Invalid input, please try again.");
-                                action = sc.nextLine();
-                            }
-                            // If unhappy with stock
-                            while (action.equals("Change")) {
-                                // # of items
-                                System.out.println("Enter the amount you like to buy:");
-                                stockAmount = sc.nextInt();
-                                // Check if # of item goes over stock
-                                while (bStock.get(item - 1) - stockAmount < 0) {
-                                    //If larger than stock or -ve, make user try again
-                                    System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
-                                    stockAmount = sc.nextInt();
-                                }
-                                // Confirmation to add to cart, change stock or cancel purchase
-                                System.out.println("Would you like to add " + stockAmount + " items of " + bookP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount of items, or \"Cancel\" purchase:");
-                                sc.nextLine();
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
-                                }
-                            }
-                            // If unhappy with purchase
-                            if (action.equals("Cancel")) {
-                                // Purchase, Categories, Cart, or End
-                                System.out.println("Would you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
-                                    action = sc.nextLine();
-                                }
-                            }
-                            // if happy with purchase
-                            if (action.equals("Yes")) {
-                                // Updated Stock
-                                bStock.set(item - 1, bStock.get(item - 1) - stockAmount);
-                                //Add item to cart
-                                cart.add(bookP[item - 1]);
-                                //Add price of item to cart
-                                cartPrice.add(bPrice[item - 1]);
-                                //Add stock of item to cart
-                                cartStock.add(stockAmount);
-                                // add total of item price * stock
-                                cartTotal.add(bPrice[item - 1] * stockAmount);
-                                // Purchase, Categories, Cart, or End
-                                System.out.println("Added to Cart.\nWould you like to \"Purchase\" other items, browse \"Categories\", head to \"Cart\", or \"End\" experience:");
-                                action = sc.nextLine();
-                                // If not correct , make user try again
-                                while (!action.equals("Purchase") && !action.equals("Categories") && !action.equals("Cart") && !action.equals("End")) {
-                                    System.out.println("Invalid input, please try again.");
+                                    System.out.println("Invalid input, please try again:");
                                     action = sc.nextLine();
                                 }
                             }
@@ -399,7 +234,7 @@ public class Main {
                         i = 1;
                         break;
                     case "Categories":
-                        //Chose Category
+                        //Choose Category
                         System.out.println("To see the selection of products, Type the name of the category");
                         //Print out Category
                         for (String categories : category)
@@ -408,45 +243,88 @@ public class Main {
                         action = sc.nextLine();
                         // If not correct , make user try again
                         while (!action.equals("Electronics") && !action.equals("Clothing") && !action.equals("Books")) {
-                            System.out.println("Invalid input, please try again.");
+                            System.out.println("Invalid input, please try again:");
                             action = sc.nextLine();
                         }
                         break;
                     case "Cart":
                         if (cart.size() == 0) {
-                            System.out.println("You have no items in your cart.");
+                            System.out.println("My Cart:\nYour cart is empty.");
                             //Categories or End
                             System.out.println("Would you like to browse \"Categories\" or \"End\" experience:");
                             action = sc.nextLine();
                             // If not correct , make user try again
                             while (!action.equals("Categories") && !action.equals("End")) {
-                                System.out.println("Invalid input, please try again.");
+                                System.out.println("Invalid input, please try again:");
                                 action = sc.nextLine();
                             }
                             break;
                         }
-                        System.out.println("My Cart.\nItem:");
-                        System.out.println("j:cart.size()"+j + " " + cart.size());
-                        while (j < cart.size()) {
-                            System.out.println("1j:cart.size()"+j + " " + cart.size());
-                            System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nTotal: $" + cartTotal.get(j));
+                        // Show Cart
+                        // Title, Item
+                        System.out.println("My Cart:\nItem(s):");
+                        // Loop util 1 less than cart size
+                        for (j = 0; j < cart.size(); j++) {
+                            // #, name, price, stock, item total
+                            System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nItem Total: $" + cartTotal.get(j));
+                            // Sum up total
                             total += cartTotal.get(j);
-                            j++;
-                            System.out.println("2j:cart.size()"+j + " " + cart.size());
                         }
-                        System.out.println("Total: $" + total);
+                        //Total of Cart
+                        System.out.println("Total: $" + total + "\n");
+                        total = 0;
                         // Buy, Change, Categories, or End
-                        System.out.println("Would you like to \"Buy\", \"Change\" amounts of items, browse \"Categories\", or \"End\" experience:");
+                        System.out.println("Would you like to \"Buy\", \"Change\" amounts, \"Remove\" an item, browse \"Categories\", or \"End\" experience:");
                         action = sc.nextLine();
                         // If not correct , make user try again
-                        while (!action.equals("Buy") && !action.equals("Change") && !action.equals("Categories") && !action.equals("End")) {
-                            System.out.println("Invalid input, please try again.");
+                        while (!action.equals("Buy") && !action.equals("Change") && !action.equals("Remove") && !action.equals("Categories") && !action.equals("End")) {
+                            System.out.println("Invalid input, please try again:");
                             action = sc.nextLine();
+                        }
+                        while (action.equals("Change")) {
+                            System.out.println("Enter the number of the item you like to change:");
+                            item = sc.nextInt();
+                            while (item <= 0 || item > cart.size()) {
+                                System.out.println("Invalid input, please try again:");
+                                item = sc.nextInt();
+                            }
+                            System.out.println("Stock \"-\" " + cartStock + " \"+\", or \"Cancel\"");
+                            action = sc.nextLine();
+                            while (!action.equals("-") && !action.equals("+") && !action.equals("Cancel")) {
+                                System.out.println("Invalid input, please try again:");
+                                action = sc.nextLine();
+                            }
+                            if (action.equals("-")) {
+                                System.out.println("Enter how much less stock you want:");
+                                stockAmount = sc.nextInt();
+                                while (cartStock.get(item - 1) < stockAmount) {
+                                    System.out.println("Not enough stock in your cart, please try again.\nEnter how much less stock you want:");
+                                    stockAmount = sc.nextInt();
+                                }
+                                cartStock.set(item - 1, stockAmount);
+                                cartTotal.set(item - 1, cartPrice.get(item - 1) * stockAmount);
+
+                            }
+                            while (eStock.get(item - 1) - stockAmount < 0) {
+                                System.out.println("Not enough stock, please try again.\nEnter the amount you like to buy:");
+                                stockAmount = sc.nextInt();
+                            }
+                            System.out.println("Would you like to add " + stockAmount + " item(s) of " + electronicP[item - 1] + " to your cart.\n\"Yes\", \"Change\" the amount, or \"Cancel\":");
+                            sc.nextLine();
+                            action = sc.nextLine();
+                            // If not correct , make user try again
+                            while (!action.equals("Yes") && !action.equals("Change") && !action.equals("Cancel")) {
+                                System.out.println("Invalid input, please try again:");
+                                action = sc.nextLine();
+                            }
                         }
                         break;
                 }
             }
-            System.out.println("Thank you for ordering form our store!");
+            if (action.equals("Buy"))
+                System.out.println("Thank you for ordering from our store!\nWould you like to \"End\" your experience or \"Continue\"");
+            else
+                System.out.println("Thank you for visiting our store!");
         }
         sc.close();
     }
