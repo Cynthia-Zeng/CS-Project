@@ -66,8 +66,8 @@ public class Main {
                     System.out.println("Invalid input, please try again:");
                     action = sc.nextLine();
                 }
-                //loop until buy, or ending experience
-                while (!action.equals("Buy") && !action.equals("End")) {
+                //loop until ending experience
+                while (!action.equals("End")) {
                     switch (action) {
                         //show category
                         case "Electronics":
@@ -604,7 +604,7 @@ public class Main {
                                 System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nItem Total: $" + cartTotal.get(j));
                                 total += cartTotal.get(j);
                             }
-                            //cart toal
+                            //cart total
                             System.out.println("Total: $" + total + "\n");
                             total = 0;
                             // Buy, stock, remove, categories, end
@@ -814,7 +814,6 @@ public class Main {
                                         System.out.println("Invalid input, please try again:");
                                         action = sc.nextLine();
                                     }
-                                    break;
                                 }
                                 // cancel
                                 else if (action.equals("Cancel")) {
@@ -911,59 +910,40 @@ public class Main {
                             }
                             break;
                         case "Buy":
-                            // bought
-                            if (action.equals("Buy")) {
-                                // Show invoice
-                                System.out.println("Invoice:\nItem(s):");
-                                for (j = 0; j < cart.size(); j++) {
-                                    // #,name,$, stock, item totals
-                                    System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nItem Total: $" + cartTotal.get(j));
-                                    //sum up $
-                                    total += cartTotal.get(j);
-                                }
-                                // totals
-                                System.out.println("Total: $" + total + "\n");
-                                total = 0;
-                                System.out.println("Would you like to place the order? \"Buy\", browse \"Categories\", or \"End\" your experience:");
+                            // Show invoice
+                            System.out.println("Invoice:\nItem(s):");
+                            for (j = 0; j < cart.size(); j++) {
+                                // #,name,$, stock, item totals
+                                System.out.println("\"" + (j + 1) + "\" " + cart.get(j) + "\nPrice: $" + cartPrice.get(j) + "\nStock: " + cartStock.get(j) + "\nItem Total: $" + cartTotal.get(j));
+                                //sum up $
+                                total += cartTotal.get(j);
+                            }
+                            // totals
+                            System.out.println("Total: $" + total + "\n");
+                            total = 0;
+                            System.out.println("Would you like to place the order? \"Place\", browse \"Categories\", or \"End\" your experience:");
+                            action = sc.nextLine();
+                            //Try again
+                            while (!action.equals("Place") && !action.equals("Categories") && !action.equals("End")) {
+                                System.out.println("Invalid input, please try again:");
                                 action = sc.nextLine();
-                                //Try again
-                                while (!action.equals("Buy") && !action.equals("Categories") && !action.equals("End")) {
+                            }
+                            if (action.equals("Place")) {
+                                for (j = 0; j < cart.size(); j++) {
+                                    cart.remove(j);
+                                    cartPrice.remove(j);
+                                    cartStock.remove(j);
+                                    cartTotal.remove(j);
+                                }
+                                System.out.println("Thank you for ordering from our store!\nWould you like to \"End\" your experience or \"Continue\"");
+                                action = sc.nextLine();
+                                // try again
+                                while (!action.equals("End") && !action.equals("Continue")) {
                                     System.out.println("Invalid input, please try again:");
                                     action = sc.nextLine();
                                 }
-                                if (action.equals("Buy")) {
-                                    for (j = 0; j < cart.size(); j++) {
-                                        cart.remove(j);
-                                        cartPrice.remove(j);
-                                        cartStock.remove(j);
-                                        cartTotal.remove(j);
-                                    }
-                                    System.out.println("Thank you for ordering from our store!\nWould you like to \"End\" your experience or \"Continue\"");
-                                    action = sc.nextLine();
-                                    // try again
-                                    while (!action.equals("End") && !action.equals("Continue")) {
-                                        System.out.println("Invalid input, please try again:");
-                                        action = sc.nextLine();
-                                    }
-                                }
-                                break;
                             }
-                    }
-                }
-                // bought
-                if (action.equals("Buy")) {
-                    for (j = 0; j < cart.size(); j++) {
-                        cart.remove(j);
-                        cartPrice.remove(j);
-                        cartStock.remove(j);
-                        cartTotal.remove(j);
-                    }
-                    System.out.println("Thank you for ordering from our store!\nWould you like to \"End\" your experience or \"Continue\"");
-                    action = sc.nextLine();
-                    // try again
-                    while (!action.equals("End") && !action.equals("Continue")) {
-                        System.out.println("Invalid input, please try again:");
-                        action = sc.nextLine();
+                            break;
                     }
                 }
             }
@@ -980,10 +960,10 @@ public class Main {
             action = "Menu";
             int count = 0;
             while (action.equals("Menu") && !action.equals("End")) {
-                System.out.println("Menu:\nHere are the pending order(s)\n\"1\" Order 1\\nPlease enter the number to view the order:");
+                System.out.println("Menu:\nHere are the pending order(s)\n\"1\" Order 1\nPlease enter the number to view the order:");
                 int userNum = sc.nextInt();
                 // Try again
-                while (userNum < 1) {
+                while (userNum != 1) {
                     System.out.println("Invalid input, please try again:");
                     userNum = sc.nextInt();
                 }
